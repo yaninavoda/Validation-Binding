@@ -44,6 +44,9 @@ namespace ProductsValidation.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
+            var categories = Product.GetCategories();
+            ViewBag.Categories = categories;
+
             Product prod = myProducts.Find(prod => prod.Id == id);
             if (prod != null)
             {
@@ -55,6 +58,9 @@ namespace ProductsValidation.Controllers
         [HttpPost]
         public IActionResult Edit(Product product)
         {
+            var categories = Product.GetCategories();
+            ViewBag.Categories = categories;
+
             myProducts[myProducts.FindIndex(prod => prod.Id == product.Id)] = product;
 
             return View(nameof(Details), product);
