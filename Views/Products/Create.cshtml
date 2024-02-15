@@ -21,7 +21,7 @@
             <div class="form-group mt-4">
                 <label asp-for="Type" class="control-label"></label>
                 <br />
-                <select asp-for="Type" class="form-select">
+                <select asp-for="Type" class="form-control">
                     @foreach (var category in ViewBag.Categories)
                     {
                         <option value=@category>@category</option>

@@ -31,7 +31,7 @@ namespace ProductsValidation.Controllers
             return View(myProducts);
         }
         
-        public IActionResult View(int id)
+        public IActionResult Details(int id)
         {
             Product prod = myProducts.Find(prod => prod.Id == id);
             if (prod != null)
@@ -56,7 +56,8 @@ namespace ProductsValidation.Controllers
         public IActionResult Edit(Product product)
         {
             myProducts[myProducts.FindIndex(prod => prod.Id == product.Id)] = product;
-            return View(product);
+
+            return View(nameof(Details), product);
         }
 
         
@@ -76,14 +77,14 @@ namespace ProductsValidation.Controllers
                 result.AddToModelState(ModelState);
 
                 // re-render the view when validation failed.
-                return View("Create", product);
+                return View(product);
             }
 
             myProducts.Add(product);
 
             TempData["notice"] = "Person successfully created";
             
-            return View("View", product);
+            return View("Details", product);
         }
 
         public IActionResult Create()
