@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProductsValidation.Models;
 using ProductsValidation.Services;
+using ProductsValidation.Validators;
 
 namespace ProductsValidation.Controllers
 {
@@ -14,12 +18,14 @@ namespace ProductsValidation.Controllers
     public class ProductsController : Controller
     {
         private List<Product> myProducts;
+        private IValidator<Product> _validator;
 
-        public ProductsController(Data data)
+        public ProductsController(Data data, IValidator<Product> validator)
         {
             myProducts = data.Products;
+            _validator = validator;
         }
-        
+
         public IActionResult Index(int filterId, string filtername)
         {
             return View(myProducts);
@@ -57,13 +63,39 @@ namespace ProductsValidation.Controllers
         [HttpPost]
         public IActionResult Create(Product product)
         {
+            var categories = Product.GetCategories();
+            ViewBag.Categories = categories;
+
+            ValidationResult result = _validator.Validate(product);
+
+            if (!result.IsValid)
+            {
+                // Copy the validation results into ModelState.
+                // ASP.NET uses the ModelState collection to populate 
+                // error messages in the View.
+                result.AddToModelState(ModelState);
+
+                // re-render the view when validation failed.
+                return View("Create", product);
+            }
+
             myProducts.Add(product);
+
+            TempData["notice"] = "Person successfully created";
+            
             return View("View", product);
         }
 
         public IActionResult Create()
         {
-            return View(new Product(){Id = myProducts.Last().Id + 1});
+            var categories = Product.GetCategories();
+            ViewBag.Categories = categories;
+
+            var newProduct = myProducts.Count > 0 ?
+                new Product { Id = myProducts.Last().Id + 1 } :
+                new Product { Id = 1 };
+
+            return View(newProduct);
         }
 
         public IActionResult Delete(int id)

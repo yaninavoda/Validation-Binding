@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using ProductsValidation.Models;
 using ProductsValidation.Services;
+using System.Data;
 
 namespace ProductsValidation.Controllers
 {
@@ -18,10 +19,40 @@ namespace ProductsValidation.Controllers
         {
             users = data.Users;
         }
-        
+
         public IActionResult Index(string id)
         {
             return View("Index", users);
+        }
+
+        [HttpGet]
+        public IActionResult Create([FromQuery] int? id,
+                                    [FromQuery] string name,
+                                    [FromQuery] string email,
+                                    [FromQuery] string role)
+        {
+            int lastId = users.Max(user => user.Id.Value);
+            var user = new User { Id = lastId + 1, Name = name, Email = email, Role = role };
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public IActionResult Create(User user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            users.Add(user);
+
+            return View("Details", user);
+        }
+
+        public IActionResult Details(User user)
+        {
+            return View(user);
         }
     }
 }

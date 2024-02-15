@@ -1,15 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProductsValidation.Models
 {
     public class User
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Role { get; set; }
+        public int? Id { get; set; }
+
+        [Required(ErrorMessage = "{0} is obligatory and must be supplied in query string.")]
+        public string? Name { get; set; }
+
+        [Required(ErrorMessage = "{0} is obligatory and must be supplied in query string.")]
+        public string? Email { get; set; }
+
+        [Required(ErrorMessage = "{0} is obligatory and must be supplied in query string.")]
+        public string? Role { get; set; }
     }
 }
