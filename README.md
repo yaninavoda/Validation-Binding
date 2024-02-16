@@ -10,9 +10,9 @@ v 3. **Description**:
    - should not be equal to Name but should start with the Name of the product V
  V 4. **Type**: enum with values: *Toy, Technique, Clothes, Transport* - make this field displayed with a SelectList on Views for editing and creation to make impossible entering wrong value.
 
-After clicking on Save button:
- - if there are no validation errors - the product should be saved and displayed in view (details) mode
- - othervise validation errors should be displayed on the same page
+v After clicking on Save button:
+v - if there are no validation errors - the product should be saved and displayed in view (details) mode
+v - othervise validation errors should be displayed on the same page
  
  ### Binding:
  1. Add an ability to edit all prices at once for products of chosen category:

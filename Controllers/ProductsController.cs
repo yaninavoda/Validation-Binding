@@ -101,14 +101,27 @@ namespace ProductsValidation.Controllers
         }
 
         [HttpPost]
-        public IActionResult FilterByCategory(Product.Category category)
+        public IActionResult FilterByCategory(Product product)
         {
-            //var categories = Product.GetCategories();
-            //ViewBag.Categories = categories;
+            var productsOfCategory = myProducts.Where(pr => pr.Type == product.Type);
 
-            var productsOfCategory = myProducts.Where(product => product.Type == category);
+            return View("GroupEdit", productsOfCategory.ToArray());
+        }
 
-            return View("Index", productsOfCategory);
+        public IActionResult GroupEdit() 
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult GroupEdit(List<Product> products)
+        {
+            foreach (var product in products)
+            {
+                myProducts[myProducts.FindIndex(prod => prod.Id == product.Id)] = product;              
+            }
+
+            return View("Index", myProducts);
         }
 
         public IActionResult Delete(int id)

@@ -1,0 +1,54 @@
+﻿@model Product[]
+
+@{
+    ViewData["Title"] = "Category edit";
+    string category;
+    if (Model.Length == 0)
+    {
+        category = "There are no products of this type.";
+    }
+    else
+    {
+        category = Model.FirstOrDefault().Type.ToString();
+    }
+}
+
+<h1>@ViewData["Title"]</h1>
+<h4>@if (Model.Length == 0)
+    {
+        @category
+    }
+    else
+    {
+        @:Edit prices for '@category' category
+    }
+     </h4>
+<hr />
+<form asp-action="GroupEdit">
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Price</th>
+    </tr>
+    <tbody>
+        @for (int i = 0; i < Model.Length; i++)
+        {
+            <tr>
+                <td><input asp-for="@Model[i].Id" class="form-control"  readonly placeholder="@Model[i]" /></td>
+                <td><input asp-for="@Model[i].Name" class="form-control" readonly placeholder="@Model[i].Name" /></td>
+                <td><input asp-for="@Model[i].Price" class="form-control" placeholder="@Model[i].Price" /></td>
+                <td><input asp-for="@Model[i].Type" hidden /></td>
+                <td><input asp-for="@Model[i].Description" hidden /></td>
+            </tr>
+        }        
+    </tbody>
+</table>
+
+    <div class="form-group">
+        <input type="submit" value="Save for all" class="btn btn-primary" />
+    </div>
+</form>
+
+
+
