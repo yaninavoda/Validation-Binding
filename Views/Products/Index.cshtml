@@ -1,12 +1,13 @@
 ﻿@model IEnumerable<ProductsValidation.Models.Product>
 
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Products";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 <div>
-    <a asp-action="Create">Create new</a>
+    <a asp-action="Create">Create new |</a>
+    <a asp-action="FilterByCategory"> Choose category</a>
 </div>
 <table class="table">
     <thead>

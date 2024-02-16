@@ -1,29 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using ProductsValidation.Models;
 using ProductsValidation.Services;
-using ProductsValidation.Validators;
 
 namespace ProductsValidation.Controllers
 {
-    
+
     public class ProductsController : Controller
     {
         private List<Product> myProducts;
-        private IValidator<Product> _validator;
-
-        public ProductsController(Data data, IValidator<Product> validator)
+        public ProductsController(Data data)
         {
             myProducts = data.Products;
-            _validator = validator;
         }
 
         public IActionResult Index(int filterId, string filtername)
@@ -61,6 +51,11 @@ namespace ProductsValidation.Controllers
             var categories = Product.GetCategories();
             ViewBag.Categories = categories;
 
+            if (!ModelState.IsValid)
+            {
+                return View(product);
+            }
+
             myProducts[myProducts.FindIndex(prod => prod.Id == product.Id)] = product;
 
             return View(nameof(Details), product);
@@ -73,22 +68,14 @@ namespace ProductsValidation.Controllers
             var categories = Product.GetCategories();
             ViewBag.Categories = categories;
 
-            ValidationResult result = _validator.Validate(product);
-
-            if (!result.IsValid)
+            if (!ModelState.IsValid)
             {
-                // Copy the validation results into ModelState.
-                // ASP.NET uses the ModelState collection to populate 
-                // error messages in the View.
-                result.AddToModelState(ModelState);
-
-                // re-render the view when validation failed.
                 return View(product);
             }
 
             myProducts.Add(product);
 
-            TempData["notice"] = "Person successfully created";
+            TempData["notice"] = "Product successfully created";
             
             return View("Details", product);
         }
@@ -103,6 +90,25 @@ namespace ProductsValidation.Controllers
                 new Product { Id = 1 };
 
             return View(newProduct);
+        }
+
+        public IActionResult FilterByCategory()
+        {   
+            var categories = Product.GetCategories();
+            ViewBag.Categories = categories;
+
+            return View(); 
+        }
+
+        [HttpPost]
+        public IActionResult FilterByCategory(Product.Category category)
+        {
+            //var categories = Product.GetCategories();
+            //ViewBag.Categories = categories;
+
+            var productsOfCategory = myProducts.Where(product => product.Type == category);
+
+            return View("Index", productsOfCategory);
         }
 
         public IActionResult Delete(int id)

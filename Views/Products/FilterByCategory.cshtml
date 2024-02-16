@@ -1,0 +1,26 @@
+﻿@model ProductsValidation.Models.Product
+
+@{
+    ViewData["Title"] = "Categories";
+
+}
+
+<h4>Choose a category</h4>
+<hr />
+    <div class="row">
+        <div class="col-md-4">
+        <form asp-action="FilterByCategory" method="post">
+            <div class="form-group mt-4">
+                <select asp-for="Type" class="form-control">
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <option value=@category>@category</option>
+                    }
+                </select>
+
+            <div class="form-group mt-4">
+                <input type="submit" value="Confirm" class="btn btn-primary" />
+            </div>
+        </form>
+        </div>
+    </div>

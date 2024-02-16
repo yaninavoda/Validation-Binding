@@ -1,14 +1,15 @@
-﻿using System;
+﻿using ProductsValidation.Validators;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProductsValidation.Models
 {
     public class Product
     {
-        //private const double maxPriceAllowed = 100000d;
+        private const double MAX_PRICE = 100000d;
+
         public enum Category 
         {   
             Toy,
@@ -20,10 +21,14 @@ namespace ProductsValidation.Models
         public int Id { get; set; }
         public Category Type { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
+        [DescriptionNameValidator]
         public string Description { get; set; }
 
+        [Required]
+        [Range(1, MAX_PRICE, ErrorMessage = "{0} must be between 1 and 100000.")]
         public decimal Price { get; set; }
 
         public static IEnumerable<Category> GetCategories()
