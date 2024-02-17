@@ -31,8 +31,7 @@ namespace ProductsValidation.Controllers
                                     [FromQuery] string email,
                                     [FromQuery] string role)
         {
-            int lastId = users.Max(user => user.Id.Value);
-            var user = new User { Id = lastId + 1, Name = name, Email = email, Role = role };
+            var user = new User { Name = name, Email = email, Role = role };
 
             return View(user);
         }
@@ -40,6 +39,9 @@ namespace ProductsValidation.Controllers
         [HttpPost]
         public IActionResult Create(User user)
         {
+            int lastId = users.Max(user => user.Id.Value);
+            user.Id = lastId + 1;
+
             if (!ModelState.IsValid)
             {
                 return View();
