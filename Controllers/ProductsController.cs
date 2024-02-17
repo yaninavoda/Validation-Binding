@@ -114,11 +114,15 @@ namespace ProductsValidation.Controllers
         }
 
         [HttpPost]
-        public IActionResult GroupEdit(List<Product> products)
+        public IActionResult GroupEdit(Product[] products)
         {
             foreach (var product in products)
             {
-                myProducts[myProducts.FindIndex(prod => prod.Id == product.Id)] = product;              
+                if (!ModelState.IsValid)
+                {
+                    return View(products);
+                }
+                myProducts[myProducts.FindIndex(prod => prod.Id == product.Id)] = product;             
             }
 
             return View("Index", myProducts);

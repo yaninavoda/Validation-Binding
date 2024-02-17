@@ -25,25 +25,29 @@
      </h4>
 <hr />
 <form asp-action="GroupEdit">
-<table class="table">
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Price</th>
-    </tr>
-    <tbody>
-        @for (int i = 0; i < Model.Length; i++)
-        {
-            <tr>
-                <td><input asp-for="@Model[i].Id" class="form-control"  readonly placeholder="@Model[i]" /></td>
-                <td><input asp-for="@Model[i].Name" class="form-control" readonly placeholder="@Model[i].Name" /></td>
-                <td><input asp-for="@Model[i].Price" class="form-control" placeholder="@Model[i].Price" /></td>
-                <td><input asp-for="@Model[i].Type" hidden /></td>
-                <td><input asp-for="@Model[i].Description" hidden /></td>
-            </tr>
-        }        
-    </tbody>
-</table>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Price</th>
+        </tr>
+        <tbody>
+            @for (int i = 0; i < Model.Length; i++)
+            {
+                <tr>
+                    <td><input asp-for="@Model[i].Id" class="form-control"  readonly placeholder="@Model[i]" /></td>
+                    <td><input asp-for="@Model[i].Name" class="form-control" readonly placeholder="@Model[i].Name" /></td>
+                    <td><input asp-for="@Model[i].Price" class="form-control" placeholder="@Model[i].Price" /></td>
+                    <span asp-validation-for="@Model[i].Price" class="text-danger"></span>
+
+                    <td><input asp-for="@Model[i].Type" hidden /></td>
+                    <td><input asp-for="@Model[i].Description" hidden /></td>
+                </tr>
+            }        
+        </tbody>
+    </table>
 
     <div class="form-group">
         <input type="submit" value="Save for all" class="btn btn-primary" />
